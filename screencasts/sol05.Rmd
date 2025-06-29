@@ -1,0 +1,332 @@
+---
+title: "Workshop 5: Joining datasets, small multiple plots and making tidy data wide"
+output: html_document
+---
+
+## Introduction
+
+Today we'll use a new dataset for schools alongside the school roll data. Both are from:
+
+https://www.educationcounts.govt.nz/statistics/school-rolls
+
+```{r setup, message=FALSE}
+library(tidyverse)
+
+roll <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/schools/roll.csv")
+schools <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/schools/schools.csv")
+#roll <- read_csv("roll.csv") # for loading from a local copy
+#schools <- read_csv("schools.csv") # for loading from a local copy
+
+clean <- roll |> mutate(Level = as.numeric(substring(Level, 6)))
+clean
+```
+
+## Grouping by more than one variable
+
+In the last workshop you produced a chart of the total number of students by year level that looks like this:
+
+```{r}
+clean |> group_by(Level) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(aes(x=Level, y=Total))
+```
+
+This is an interesting chart as there is an unexpected peak at Level 7 (caused by a reclassification of students at year 7/8) and also it is interesting to see the decrease as students leave school early.
+
+## Try yourself
+
+1. Alter the chart above so as to include ethnic group on the chart. Hint: You'll need to group by two variables for this, and utilise another aesthetic such as `fill`.
+
+```{r}
+clean |> group_by(Level, EthnicGroup) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(aes(x=Level, y=Total, fill=EthnicGroup), position='dodge')
+```
+
+## Small multiple plots
+
+In the last exercise you produced a graph of the total number of students by year level and EthnicGroup. The problem with this chart is that even if you play with the `position` argument of `geom_col()` it is hard to see if the patterns in total number of students by year level are similar or different across different ethnicities.
+
+An alternate is to produce a plot for each ethnicity. We could just go ahead and create separate plots by using `filter`
+
+```{r}
+eu_year_by_level <- clean |> filter(EthnicGroup == "European") |> group_by(Level) |> summarise(Total = sum(Students))
+ggplot(eu_year_by_level) +
+  geom_col(mapping=aes(x=Level, y=Total))
+
+as_year_by_level <- clean |> filter(EthnicGroup == "Asian") |> group_by(Level) |> summarise(Total = sum(Students))
+ggplot(as_year_by_level) +
+  geom_col(mapping=aes(x=Level, y=Total))
+```
+
+But that gets quite awkward! Fortunately, `ggplot` can do grouping for us via the `facet_wrap` or `facet_grid` commands. These produce what is known as 'small multiple' plots - basically divide the plot up into subplots, and in each subplot we show a different group with consistent style/axes etc. 
+
+To do this, we'll need to group by EthnicGroup as well as Level, and then use `facet_wrap`:
+
+```{r}
+ethnicity_by_year <- clean |> group_by(EthnicGroup, Level) |> summarise(Total = sum(Students))
+ggplot(ethnicity_by_year) +
+  geom_col(mapping=aes(x=Level, y=Total)) +
+  facet_wrap(vars(EthnicGroup))
+```
+
+The `vars` helper function here is there so that `facet_wrap` knows to look for the named column in the data frame.
+
+### Try yourself
+
+1. Try altering the above plot so that it uses a different y-axis for each plot. This can be useful when there's differing numbers of students in each group. Hint: see the help for `facet_wrap`.
+
+```{r}
+ggplot(ethnicity_by_year) +
+  geom_col(mapping=aes(x=Level, y=Total)) +
+  facet_wrap(vars(EthnicGroup), scales = 'free_y')
+```
+
+
+2. Redo the plot without the International fee paying students. You might want to see how you can set the number of rows and columns as well.
+
+```{r}
+ethnicity_by_year |>
+  filter(EthnicGroup != "International fee paying") |>
+  ggplot() +
+  geom_col(mapping=aes(x=Level, y=Total)) +
+  facet_wrap(vars(EthnicGroup), scales = 'free_y', nrow=3)
+```
+
+
+## Looking at the `schools` data
+
+Start by taking a look at the `schools` data:
+
+```{r}
+schools
+```
+
+### Try yourself
+
+1. How many schools are there in the Palmerston North Territorial Authority?
+
+```{r}
+schools |> filter(TerritorialAuthority == "Palmerston North")
+# there are 43 schools in Palmy
+```
+
+2. Of the schools in Palmerston North, how many are co-ed, single-sex girls or single-sex boys? *You can use `count(SchoolGender)` for this.*
+
+```{r}
+schools |> filter(TerritorialAuthority == "Palmerston North") |>
+  count(SchoolGender)
+
+# Alternate:
+schools |> filter(TerritorialAuthority == "Palmerston North") |>
+  group_by(SchoolGender) |>
+  summarise(count = n())
+```
+
+3. Produce a chart that shows the breakdown in secondary schools by school gender (co-ed, single-sex girls, single-sex boys) for each of the three Takiwa (education regions). You may wish to remove the two schools that have senior co-ed and junior boys only.
+
+```{r}
+schools |> filter(Sector == "Secondary") |>
+  filter(SchoolGender != "Sen.Co-Ed, Jun.Boys") |>
+  group_by(Takiwa) |>
+  count(SchoolGender) |>
+  ggplot() +
+  geom_col(aes(x=SchoolGender, y=n)) +
+  facet_wrap(vars(Takiwa), ncol=1) +
+  labs(x = NULL,
+       y = "Number of secondary schools")
+```
+
+## Joining datasets with `left_join`
+
+If we want to summarise the student information across schools, we'll need to join the two datasets together. Generally this is done by matching one or more "key" columns in both datasets. The most common way to do this is via a **left** join, where every row in the dataset we supply on the left is kept, and we match it to rows in the dataset on the right that share the same information across the key columns.
+
+The following will do this:
+
+```{r}
+all_data <- clean |> left_join(schools)
+all_data
+```
+
+Notice that the `left_join` function automatically found which column to match on (based on matching column names) and that we end up with the same number of rows in this case, as each row in the clean roll dataset only matches a single school. We do, ofcourse, get the additional variables from the `schools` dataset.
+
+We can now use the `all_data` dataset to answer questions using the variables from both datasets:
+
+### Try yourself
+
+1. How many students are there in each Regional Council?
+
+```{r}
+all_data |> group_by(RegionalCouncil) |>
+  summarise(Total = sum(Students))
+```
+
+2. How many students of each ethnicity are there in each Takiwa?
+
+```{r}
+all_data |> group_by(Takiwa, EthnicGroup) |>
+  summarise(Total = sum(Students))
+```
+
+3. How many students are in schools with a religious affiliation?
+
+```{r}
+# Take a look and see what is in the Affiliation variable:
+all_data |> count(AffiliationType)
+# We want AffiliationType == "Religious Affiliation"
+all_data |> filter(AffiliationType == "Religious Affiliation") |>
+   summarise(Total = sum(Students))
+# Which religious affiliations are these, and how many?
+all_data |> filter(AffiliationType == "Religious Affiliation") |>
+  group_by(Affiliation) |>
+  summarise(Total = sum(Students))
+```
+
+4. Produce a chart showing the total number of students of each year level within each Takiwa by using `facet_wrap()` to produce side by side plots by Takiwa.
+
+```{r}
+all_data |> group_by(Takiwa, Level) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(aes(x=Level, y=Total)) +
+  facet_wrap(vars(Takiwa))
+
+# try with just 1 column
+all_data |>
+  group_by(Takiwa, Level) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(aes(x=Level, y=Total)) +
+  facet_wrap(vars(Takiwa), ncol=1)
+```
+
+## Facetting with two variables
+
+We can facet with more than one variable. e.g. we could alter the level by Takiwa plot to include ethnic group as follows:
+
+```{r}
+all_data |>
+  filter(EthnicGroup != "International fee paying") |>
+  group_by(Takiwa, EthnicGroup, Level) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(mapping=aes(x=Level, y=Total)) +
+  facet_wrap(vars(Takiwa, EthnicGroup), ncol=6)
+```
+
+While this works, we end up with a lot of space used for all the headings. An alternate is to use `facet_grid()` which uses one variable for rows and another for columns.
+
+### Try yourself
+
+1. Alter the above chart to show how the number of students in each year level differs by ethnicity in each Takiwa using `facet_grid()`.
+
+```{r}
+all_data |>
+  filter(EthnicGroup != "International fee paying") |>
+  group_by(Takiwa, EthnicGroup, Level) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(mapping=aes(x=Level, y=Total)) +
+  facet_grid(rows=vars(Takiwa), cols=vars(EthnicGroup))
+```
+
+2. Play around with which variable is in rows and which is in columns and the `scales` parameter to `facet_grid()` to produce something that shows all subgroups reasonably well.
+
+```{r}
+all_data |>
+  filter(EthnicGroup != "International fee paying") |>
+  group_by(Takiwa, EthnicGroup, Level) |>
+  summarise(Total = sum(Students)) |>
+  ggplot() +
+  geom_col(mapping=aes(x=Level, y=Total)) +
+  facet_grid(rows=vars(EthnicGroup), cols=vars(Takiwa), scales='free_y')
+```
+
+## Using `pivot_wider` to turn tidy data into wide data
+
+Up to now, all the data we've been playing with has been **tidy**: each row consists of a single observation and each column is a separate variable.
+
+e.g. for this data we have a column for ethnic group and another column for number of students: we don't have separate columns counting each ethnic group - the counts are all in one column, and which groups that count applies to are denoted in the other columns.
+
+This makes it easy to do data manipulation, and also makes it easy to plot stuff, as `ggplot2` and `dplyr` (indeed, the whole `tidyverse` suite of packages) works best if the data are tidy.
+
+But, sometimes we want things in other forms. The following example tables up the total number of students by ethnicity for each takiwa:
+
+```{r}
+ethnicity_by_takiwa <- all_data |>
+  group_by(Takiwa, EthnicGroup) |>
+  summarise(Students = sum(Students))
+ethnicity_by_takiwa
+```
+
+It would be nicer if we could make this into a table so that we had one row for each ethnic group, and separate columns for the takiwa totals. We can do this using `pivot_wider`. The key arguments are `names_from` which is the column that provides the new column names, and `values_from` which is the column that provides the values that should go in the new columns.
+
+```{r}
+ethnicity_by_takiwa |>
+  pivot_wider(names_from = Takiwa, values_from = Students)
+```
+
+Notice we have the exact same information, it's just in a more human-readable form. It's not in a form that's easier to plot though! `ggplot` would struggle with these data, as we don't have a single "Count" column for the y-axis to use.
+
+### Try yourself
+
+1. Create a table with total number of students in each year level in each Takiwa (Hint: `group_by` Takiwa and year level then `summarise`. Once done, `pivot_wider` to a table).
+
+```{r}
+all_data |>
+  group_by(Takiwa, Level) |>
+  summarise(Total = sum(Students)) |>
+  pivot_wider(names_from = Takiwa, values_from = Total)
+```
+
+2. Create a table with the number of each ethnic group in each year level.
+
+```{r}
+all_data |>
+  group_by(EthnicGroup, Level) |>
+  summarise(Total = sum(Students)) |>
+  pivot_wider(names_from=EthnicGroup, values_from = Total)
+```
+
+3. Try adding a "Total" column to the ethnic group by takiwa table. You could do this before the `pivot_wider` by using a `mutate` with `sum(Students)`.
+
+```{r}
+# method 1: add the columns up:
+all_data |>
+  group_by(Takiwa, EthnicGroup) |>
+  summarise(Total = sum(Students)) |>
+  pivot_wider(names_from = Takiwa, values_from = Total) |>
+  mutate(Total = `Te Tai Raro` + `Te Tai Runga` + `Te Tai Whenua`) # Problem: lots of typing.
+
+# method 2: Do the total before pivoting:
+all_data |>
+  filter(!is.na(Takiwa)) |>
+  group_by(Takiwa, EthnicGroup) |>
+  summarise(Total = sum(Students)) |>
+  group_by(EthnicGroup) |> # get the grouping right. Wouldn't need this if we'd group_by(EthnicGroup, Takiwa)
+  mutate(GrandTotal = sum(Total)) |> # compute the total while things are tidy and grouped!
+  pivot_wider(names_from=Takiwa, values_from=Total) |>
+  relocate(GrandTotal, .after = last_col())
+
+# method 3: Use a package for it! The janitor package has adorn_totals() or similar:
+all_data |>
+  group_by(Takiwa, EthnicGroup) |>
+  summarise(Total = sum(Students)) |>
+  pivot_wider(names_from = Takiwa, values_from = Total) |>
+  janitor::adorn_totals(where = 'col') |> # This adds the total row for us automatically.
+  knitr::kable()
+```
+
+4. Try creating a table with the percentage of students of each ethnic group within each Takiwa. You can add a new column with `mutate()` and get the percentage by using `Students/sum(Students)` within each takiwa.
+
+```{r}
+all_data |>
+  group_by(Takiwa, EthnicGroup) |>
+  summarise(Students = sum(Students)) |>
+  mutate(Percentage = round(Students/sum(Students)*100, digits=2)) |>
+  select(-Students) |> # drop the students column so that the bits that are not pivoted have the same info across the rows that need to be compressed down
+  pivot_wider(names_from=Takiwa, values_from=Percentage)
+```
+

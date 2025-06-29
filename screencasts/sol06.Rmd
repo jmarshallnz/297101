@@ -1,0 +1,132 @@
+---
+title: "Workshop 6: Finding the Former MP for Wairarapa's Former Ute"
+output: html_document
+---
+
+## Introduction
+
+Today we'll be looking at a subset from the NZTA fleet data. This holds registration information on all vehicles in New Zealand.
+
+We have a subset of it which is loaded below. If you're on a slower internet connect, you might want to download the data from the URL and load it locally.
+
+```{r message=FALSE}
+library(tidyverse)
+
+fleet <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/fleet.csv.gz")
+#roll <- read_csv("fleet.csv.gz") # for loading from a local copy
+
+fleet
+```
+
+## Reproducing the plot
+
+The following code block filters the `fleet` data down to just cars and vans:
+
+```{r}
+cars_vans <- fleet |> filter(VEHICLE_TYPE == "PASSENGER CAR/VAN")
+```
+
+### Try yourself
+
+1. Summarise the data by counting the number of cars/vans of each `BASIC_COLOUR` for each `VEHICLE_YEAR` and then convert these to proportions by `VEHICLE_YEAR`. *Hint: `group_by(VEHICLE_YEAR)` followed by a `count` and then `mutate` is what you need.*
+
+```{r}
+prop_by_year_and_colour = cars_vans |>
+  group_by(VEHICLE_YEAR) |>
+  count(BASIC_COLOUR) |>
+  mutate(Total = sum(n), Proportion = n/Total)
+prop_by_year_and_colour
+```
+
+2. Get the basic plot up and running by plotting proportion on the y-axis and `VEHICLE_YEAR` on the x-axis, facetting by `BASIC_COLOUR`.
+
+```{r}
+ggplot(prop_by_year_and_colour) +
+  geom_line(mapping = aes(x=VEHICLE_YEAR, y=Proportion)) +
+  facet_wrap(vars(BASIC_COLOUR))
+```
+
+3. Fine tune the plot with labelling.
+
+```{r}
+ggplot(prop_by_year_and_colour) +
+  geom_line(mapping = aes(x=VEHICLE_YEAR, y=Proportion)) +
+  facet_wrap(vars(BASIC_COLOUR)) +
+  labs(x = NULL,
+       y = "Percentage of cars and vans",
+       title = "The rise of orange and demise of brown and gold",
+       subtitle = "Car and van colours in New Zealand") +
+  theme_bw() +
+  scale_y_continuous(labels = scales::label_percent())
+```
+
+
+## Are Ford Rangers a rural phenomenon?
+
+The following code pulls out utes (utility vehicles) from 2016 onwards, and classifies them via a `Type` variable into `Ranger` or `Other`:
+
+```{r}
+utes <- fleet |> filter(BODY_TYPE == "UTILITY") |>
+  filter(VEHICLE_YEAR > 2015) |>
+  mutate(Type = ifelse(MAKE == "FORD" & MODEL == "RANGER", "Ranger", "Other"))
+utes
+```
+
+### Try yourself
+
+1. Calculate the proportion of utes that are Ford Rangers for each TLA. *Hint: You want to `group_by(TLA)` and then `count`, then compute the proportion, as was done for colours above.*
+
+```{r}
+utes |>
+  group_by(TLA) |>
+  count(Type) |>
+  mutate(Proportion = n/sum(n))
+```
+
+2. Using only the proportions that correspond to `Ranger` (rather than `Other`) utes, produce a bar chart for the proportion of Ford Rangers across each `TLA`. You might want to use `fct_reorder` to reorder the `TLA` by the proportion variable so the barchart is ordered. Remember to use `geom_col` for where you have already computed the bar lengths.
+
+```{r}
+utes |>
+  group_by(TLA) |>
+  count(Type) |>
+  mutate(Proportion = n/sum(n)) |>
+  filter(Type == "Ranger") |>
+  ungroup() |>
+  mutate(TLA = fct_reorder(TLA, Proportion)) |>
+  ggplot() +
+  geom_col(mapping = aes(y=TLA, x=Proportion)) +
+  labs(y = NULL,
+       x = "Proportion of Utes that are Rangers") +
+  theme(axis.text = element_text(size = 10))
+```
+
+3. What is your conclusion? Are Ford Rangers a rural thing?
+
+Interestingly, folk in cities (like Christchurch) are typically buying Ford Rangers rather than some other type of Ute, whereas folk in some more rural locations (e.g. Waitomo, Waimate) are buying other types of ute rather than a ford ranger. So maybe Ford Rangers are more of an urban thing than a rural thing?
+
+## Finding the former Labour MP for Wairarapa's Ute
+
+In this question your goal is to find the row in the dataset that contains the Ute owned by the Labour Member of Parliament who used to represent the Wairarapa electorate. Use all the `fleet` data for this question.
+
+### Try yourself:
+
+1. Use Google to find out who the Labour Member of Parliament who used to be the MP for Wairarapa is, in case you don't know. *Hint: The initials are KM*.
+
+The MP in question is Kieran McAnulty.
+
+2. Use Google to find out what type of Ute he used to own. You want to find the colour, year and make. It's also useful if you can find some photos that show how many seats it has (roughly!)
+
+It is a red Mazda Bounty from 1997. It looks like it'd seat 4-5 people.
+
+3. Based on the `VEHICLE_YEAR`, `MAKE`, `BASIC_COLOUR` and that the `BODY_TYPE` is `UTILITY` and that it is registered in the `MASTERTON DISTRICT` (this is the `TLA`), find the row corresponding to this vehicle.
+
+```{r}
+fleet |>
+  filter(VEHICLE_YEAR == 1997,
+         BASIC_COLOUR == "RED",
+         BODY_TYPE == "UTILITY",
+         MAKE == "MAZDA",
+         TLA == "MASTERTON DISTRICT",
+         NUMBER_OF_SEATS == 5)
+```
+
