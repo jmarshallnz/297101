@@ -225,7 +225,7 @@ roll |> rename(Name = School) # rename always keeps the other columns!
 roll |> rename(Year = Level) # and keeps the same order!
 ```
 
-## Using `mutate` to add or change column
+## Using `mutate` to add or a change column
 
 `mutate()` adds new variables using functions of existing columns. You can overwrite columns as well.
 

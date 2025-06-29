@@ -145,7 +145,7 @@ roll |> select(Students, Level, everything())
 2. Rename the `School` column to `Name` keeping all other columns.
 3. Try part 2 using `rename` instead of `select`.
 
-## Using `mutate` to add or change column
+## Using `mutate` to add or change a column
 
 `mutate()` adds new variables using functions of existing columns. You can overwrite columns as well.
 
