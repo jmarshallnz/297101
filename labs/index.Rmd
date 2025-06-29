@@ -28,6 +28,12 @@ https://r-resources.massey.ac.nz/help/usingrin297.101.html
 
 [03: R Markdown and grouped numeric variables](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab03_guide.html)
 
+[04: Data wrangling with dplyr](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab04_guide.html)
+
+[05: Joining datasets, small multiple plots and making tidy data wide](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab05_guide.html)
+
+[06: Finding the Former MP for Wairarapa's Former Ute](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab06_guide.html)
+
 ## Screencasts
 
 A link will be placed below with a set of videos of Jonathan M working through each of the workshops.
