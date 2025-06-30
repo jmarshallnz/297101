@@ -217,12 +217,8 @@ class: middle, inverse
 ## Quite a lot to type
 ```{r quakes, eval=FALSE}
 ggplot(data = quakes) +
-  geom_point(
-    mapping = aes(
-      x = long,
-      y = lat
-    )
-  )
+  aes(x = long, y = lat) +
+  geom_point()
 ```
 ]
 
@@ -281,12 +277,9 @@ penguins
 .left-code[
 ```{r peng1, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point()
 ```
 ]
 
@@ -304,9 +297,9 @@ To create a chart we need to:
 
 - Tell `ggplot` what data we are plotting with `data=penguins`.
 
-- Choose what type of chart we want by adding a layer (geometry), e.g. `geom_point`.
+- Decide what columns in the data we using for features `x` and `y` of the plot with `aes()`.
 
-- Tell the geometry how to map from visual content/features to data with `mapping = aes()`.
+- Choose what type of chart we want by adding a layer (geometry), e.g. `geom_point`.
 
 All our charts will follow the same basic recipe. We might just add a few more ingredients!
 
@@ -316,18 +309,16 @@ All our charts will follow the same basic recipe. We might just add a few more i
 ## Recipe
 ```{r peng2, eval=FALSE}
 ggplot(data = penguins) + #<<
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point()
 ```
 Tell `ggplot` what data we want to plot.
 ]
 
 .right-plot[
-```{r ref.label="peng2", echo=FALSE}
+```{r, echo=FALSE}
+ggplot(data = penguins)
 ```
 ]
 
@@ -337,18 +328,18 @@ Tell `ggplot` what data we want to plot.
 ## Recipe
 ```{r peng3, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point( #<<
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    ) #<<
+  aes(x = flipper_length_mm, #<<
+      y = body_mass_g) + #<<
+  geom_point()
 ```
-Choose the type of chart we want.
+Map features of the plot to columns in the data.
 ]
 
 .right-plot[
-```{r ref.label="peng3", echo=FALSE}
+```{r, echo=FALSE}
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g)
 ```
 ]
 
@@ -358,15 +349,12 @@ Choose the type of chart we want.
 ## Recipe
 ```{r peng4, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes( #<<
-      x = flipper_length_mm, #<<
-      y = body_mass_g #<<
-      ) #<<
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() #<<
 ```
 
-Map plot features to data features.
+Select a geometry for the plot.
 ]
 
 .right-plot[
@@ -380,13 +368,10 @@ Map plot features to data features.
 ## Mapping colour to data
 ```{r peng7, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      colour = species #<<
-      )
-    )
+      colour = species) + #<<
+  geom_point()
 ```
 
 - Automatically adds a guide or legend.
@@ -407,10 +392,9 @@ ggplot(data = penguins) +
 
 - Tell `ggplot` what data we are plotting with `data=penguins`.
 
-- Choose what type of chart we want by adding a layer (geometry), e.g. `geom_point()`.
+- Decide what columns in the data we using for features `x` and `y` of the plot with `aes()`.
 
-- Tell the geometry how to map from visual content/features to data with `mapping = aes()`.
-
+- Choose what type of chart we want by adding a layer (geometry), e.g. `geom_point`.
 
 ---
 
@@ -418,12 +402,9 @@ ggplot(data = penguins) +
 ## Remember the Recipe!
 ```{r peng2b, eval=FALSE}
 ggplot(data = penguins) + #<<
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point()
 ```
 Tell `ggplot` what data we want to plot.
 ]
@@ -439,14 +420,11 @@ Tell `ggplot` what data we want to plot.
 ## Remember the Recipe!
 ```{r peng3b, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point( #<<
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    ) #<<
+  aes(x = flipper_length_mm, #<<
+      y = body_mass_g) + #<<
+  geom_point()
 ```
-Choose the type of chart we want.
+Map plot features to data features.
 ]
 
 .right-plot[
@@ -460,15 +438,12 @@ Choose the type of chart we want.
 ## Remember the Recipe!
 ```{r peng4b, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes( #<<
-      x = flipper_length_mm, #<<
-      y = body_mass_g #<<
-      ) #<<
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point()  #<<
 ```
 
-Map plot features to data features.
+Specify the geometry.
 ]
 
 .right-plot[

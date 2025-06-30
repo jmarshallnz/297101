@@ -56,13 +56,9 @@ All of these can either be **set to a single value**, or allowed to **change by 
 ## Setting a colour
 ```{r peng5, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      ),
-    colour = 'purple' #<<
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point(colour = 'purple') #<<
 ```
 
 To **set** to a single value, place inside the `geom_*()` function.
@@ -79,17 +75,14 @@ To **set** to a single value, place inside the `geom_*()` function.
 ## Setting versus Mapping
 ```{r peng6, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      colour = 'purple' #<<
-      )
-    )
+      colour = 'purple') + #<<
+  geom_point()
 ```
 To **set** to a single value, place inside the `geom_*()` function.
 
-But not inside the `aes()` function!
+**NOT** inside the `aes()` function!
 
 This is like adding a new column, and setting every entry to `purple`, so you have a grouping variable with one group `purple`.
 ]
@@ -105,13 +98,10 @@ This is like adding a new column, and setting every entry to `purple`, so you ha
 ## Mapping colour to data
 ```{r peng7, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      colour = species #<<
-      )
-    )
+      colour = species) + #<<
+  geom_point()
 ```
 
 To **map to a column of data** place inside the `aes()` function.
@@ -126,7 +116,7 @@ To **map to a column of data** place inside the `aes()` function.
 
 ## Mapping aesthetics
 
-Aesthetics are mapped to data via the `aes()` function passed to the `mapping` parameter of each geometry layer.
+Aesthetics are mapped to data via the `aes()` function. This `mapping` is then passed on to each geometry layer.
 
 What this does is define a map between features of the plot (`x`, `y`, `colour`) and features of our data (columns).
 
@@ -153,13 +143,10 @@ aes(x = flipper_length_mm,
 ## Different species
 ```{r peng8, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      colour = species #<<
-      )
-    )
+      colour = species) + #<<
+  geom_point()
 ```
 `colour` changes with data (mapping).
 ]
@@ -175,14 +162,10 @@ ggplot(data = penguins) +
 ## Different species
 ```{r peng9, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      size = species #<<
-      ),
-    alpha = 0.5 #<<
-    )
+      size = species) + #<<
+  geom_point(alpha = 0.5) #<<
 ```
 `size` changes with data (mapping).
 
@@ -200,14 +183,10 @@ ggplot(data = penguins) +
 ## Different species
 ```{r peng10, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      shape = species #<<
-      ),
-    size = 2 #<<
-    )
+      shape = species) + #<<
+  geom_point(size = 2) #<<
 ```
 `shape` changes with data (mapping).
 
@@ -241,12 +220,9 @@ And there are add-on packages with more!
 ## `geom_point()`
 ```{r peng11, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point( #<<
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() #<<
 ```
 ]
 
@@ -261,25 +237,19 @@ ggplot(data = penguins) +
 ## `geom_smooth()`
 ```{r peng12, eval=FALSE}
 ggplot(data = penguins) +
-  geom_smooth( #<<
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_smooth() #<<
 ```
 ]
 
 .right-plot[
 ```{r, echo=FALSE, message=FALSE}
 ggplot(data = penguins) +
-  geom_point(mapping = aes(x=flipper_length_mm, y=body_mass_g), alpha=0) +
-  geom_smooth(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    )
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point(alpha=0) +
+  geom_smooth()
 ```
 ]
 
@@ -289,18 +259,10 @@ ggplot(data = penguins) +
 ## Adding layers
 ```{r peng13, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    ) +
-  geom_smooth( #<<
-    mapping = aes( #<<
-      x = flipper_length_mm, #<<
-      y = body_mass_g #<<
-      ) #<<
-    ) #<<
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
+  geom_smooth() #<<
 ```
 ]
 
@@ -311,8 +273,68 @@ ggplot(data = penguins) +
 
 ---
 
+## Sidenote: Aesthetic specification
+
+There are **THREE** options for specifying aesthetics:
+
+1. Using `aes()` on a separate line added in like everything else.
+
+2. Using `mapping = aes()` inside the `ggplot()` function.
+
+3. Using `mapping = aes()` inside each of the `geom_*()` functions.
+
+The first two are the same. The third allows you to **override** the aesthetic
+mapping for a particular geometry.
+
+---
+
 .left-code[
-## Too much typing!
+## Aesthetics option 1
+
+```{r peng13b, eval=FALSE}
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm, #<<
+      y = body_mass_g) + #<<
+  geom_point() +
+  geom_smooth()
+```
+
+Separate `aes()` line applies to all geometry layers.
+]
+
+.right-plot[
+```{r, ref.label="peng13b", echo=FALSE, message=FALSE}
+```
+]
+
+---
+
+.left-code[
+## Aesthetics option 2
+
+```{r peng13c, eval=FALSE}
+ggplot(data = penguins,
+       mapping = aes( #<<
+         x = flipper_length_mm, #<<
+         y = body_mass_g #<<
+         ) #<<
+  ) +
+  geom_point() +
+  geom_smooth()
+```
+
+`mapping=aes()` inside `ggplot()` applies to all geometry layers.
+]
+
+.right-plot[
+```{r, ref.label="peng13c", echo=FALSE, message=FALSE}
+```
+]
+
+---
+
+.left-code[
+## Aesthetics option 3
 ```{r peng14, eval=FALSE}
 ggplot(data = penguins) +
   geom_point(
@@ -328,6 +350,8 @@ ggplot(data = penguins) +
       ) #<<
     )
 ```
+
+Separate `mapping=aes()` inside each `geom_*()`
 ]
 
 .right-plot[
@@ -337,38 +361,12 @@ ggplot(data = penguins) +
 
 ---
 
-
 .left-code[
-## Inheriting aesthetics
-```{r peng15, eval=FALSE}
-ggplot(data = penguins,
-       mapping = aes( #<<
-         x = flipper_length_mm, #<<
-         y = body_mass_g #<<
-         ) #<<
-       ) +
-  geom_point() +
-  geom_smooth()
-```
-Any mapping defined in the `ggplot()` function are inherited by other layers.
-]
-
-.right-plot[
-```{r, ref.label="peng15", echo=FALSE, message=FALSE}
-```
-]
-
----
-
-.left-code[
-## Unique aesthetics
+## Overriding aesthetics
 ```{r peng16, eval=FALSE}
-ggplot(data = penguins,
-       mapping = aes(
-         x = flipper_length_mm,
-         y = body_mass_g
-         )
-       ) +
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
   geom_point(
     mapping = aes( #<<
       colour = species #<<
@@ -376,7 +374,7 @@ ggplot(data = penguins,
     ) +
   geom_smooth()
 ```
-You can override or add new aesthetics in each item.
+You can override or add new aesthetics in each geometry.
 ]
 
 .right-plot[
@@ -392,8 +390,8 @@ You can override or add new aesthetics in each item.
 
 - You **set** an aesthetic by adding as a fixed argument to `geom_*()`.
 
-- You **map** an aesthetic from your data by adding it to the `mapping=aes()` argument.
+- You **map** an aesthetic from your data by adding it to the `aes()` argument.
+
+- Aesthetics inherit if they are specified in a separate `aes()` or inside `ggplot()`.
 
 - You can add multiple geometries with different aesthetics mapped.
-
-- Aesthetics inherit if you put them in the `mapping=aes()` argument of `ggplot()`.

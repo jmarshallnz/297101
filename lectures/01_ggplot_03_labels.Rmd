@@ -38,13 +38,13 @@ Functions can take a bunch of **parameters**. These are matched by name (if name
 
 The code for our plot contains 3 functions:
  - `ggplot(data = penguins)`
- - `geom_point(mapping = aes(...))`
  - `aes(x = flipper_length_mm, y = body_mass_g)`
+ - `geom_point()`
 
 Note in each case we've named the parameters (i.e. `data = penguins`, `x = flipper_length_mm`). This is generally good practice. If unnamed you're relying on order, so this works too:
 
 ```{r, eval=FALSE}
-ggplot(penguins) + geom_point(aes(flipper_length_mm, body_mass_g))
+ggplot(penguins) + aes(flipper_length_mm, body_mass_g) + geom_point()
 ```
 
 ---
@@ -78,12 +78,9 @@ labs(x = "The x axis label I want to use",
 .left-code[
 ## Axis labels
 ```{r peng17, eval=FALSE}
-ggplot(data = penguins,
-       mapping = aes(
-         x = flipper_length_mm,
-         y = body_mass_g
-         )
-       ) +
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
   geom_point(
     mapping = aes(
       colour = species
@@ -127,12 +124,9 @@ BUT! Be aware of editorialising too much. We've all read articles where the head
 .left-code[
 ## Titles tell the story
 ```{r peng18, eval=FALSE}
-ggplot(data = penguins,
-       mapping = aes(
-         x = flipper_length_mm,
-         fill = species
-         )
-       ) +
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm,
+      fill = species) +
   geom_density(alpha = 0.5) +
   labs(x = "Flipper length (mm)",
        title = "Distribution of penguin flipper lengths")
@@ -152,12 +146,9 @@ This is a bad title. We can tell it's a distribution already!
 .left-code[
 ## Titles tell the story
 ```{r peng19, eval=FALSE}
-ggplot(data = penguins,
-       mapping = aes(
-         x = flipper_length_mm,
-         fill = species
-         )
-       ) +
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm,
+      fill = species) +
   geom_density(alpha = 0.5) +
   labs(x = "Flipper length (mm)",
        title = "Penguin flipper length differs by species")
@@ -177,12 +168,9 @@ But surely it is obvious that flipper length would differ by species!
 .left-code[
 ## Titles tell the story
 ```{r peng20, eval=FALSE}
-ggplot(data = penguins,
-       mapping = aes(
-         x = flipper_length_mm,
-         fill = species
-         )
-       ) +
+ggplot(data = penguins) +
+  aes(x = flipper_length_mm,
+      fill = species) +
   geom_density(alpha = 0.5) +
   labs(x = "Flipper length (mm)",
        title = "Gentoo penguins have longer flippers")
@@ -203,7 +191,7 @@ It's making the story clear.
 border_plot <- read_csv(here::here("data/covid_arrivals/border_plot.csv"))
 ggplot(border_plot) +
   aes(x=Date, y=fit) +
-  geom_col(aes(x=Date, y=cases_per_arrival), fill='red') +
+  geom_col(aes(y=cases_per_arrival), fill='red') +
   geom_ribbon(aes(ymin=lwr, ymax=upr), alpha=0.3) +
   geom_line() +
   ylab("Detected COVID-19 positives (%)") +

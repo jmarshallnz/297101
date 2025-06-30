@@ -84,12 +84,9 @@ And lots more for specific circumstances.
 ## Changing axis scales
 ```{r peng21, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
-      y = body_mass_g
-      )
-    ) +
+  aes(x = flipper_length_mm,
+      y = body_mass_g) +
+  geom_point() +
   scale_x_continuous( #<<
     limits = c(100, 300) #<<
     ) #<<
@@ -107,13 +104,9 @@ ggplot(data = penguins) +
 ## Changing axis scales
 ```{r hrc1, eval=FALSE}
 ggplot(data = hrc) +
-  geom_point(
-    mapping = aes(
-      x = Date,
-      y = Value
-      ),
-    alpha=0.5
-  )
+  aes(x = Date,
+      y = Value) +
+  geom_point(alpha=0.5)
 ```
 ]
 
@@ -128,13 +121,9 @@ ggplot(data = hrc) +
 ## Changing axis scales
 ```{r hrc2, eval=FALSE}
 ggplot(data = hrc) +
-  geom_point(
-    mapping = aes(
-      x = Date,
-      y = Value
-      ),
-    alpha=0.5
-  ) +
+  aes(x = Date,
+      y = Value) +
+  geom_point(alpha=0.5) +
   scale_y_log10() #<<
 ```
 ]
@@ -150,12 +139,9 @@ ggplot(data = hrc) +
 .left-code[
 ## Changing axis scales
 ```{r hrc3, eval=FALSE}
-ggplot(data = hrc,
-       mapping = aes(
-         x = Date,
-         y = Value
-       )
-     ) +
+ggplot(data = hrc) +
+  aes(x = Date,
+      y = Value) +
   geom_point(alpha=0.1) +
   geom_smooth() +
   scale_y_log10()
@@ -173,13 +159,10 @@ ggplot(data = hrc,
 ## Changing colours
 ```{r peng_col1, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      col = species
-      )
-    )
+      col = species) +
+  geom_point()
 ```
 ]
 
@@ -194,13 +177,10 @@ ggplot(data = penguins) +
 ## Changing colours
 ```{r peng_col2, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      col = species
-      )
-    ) +
+      col = species) +
+  geom_point() +
   scale_colour_manual( #<<
     values = c( #<<
       Adelie = "darkgreen", #<<
@@ -236,14 +216,12 @@ peng_colour = c( #<<
       Chinstrap = "maroon", #<<
       Gentoo = "orange" #<<
     ) #<<
+
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      col = species
-      )
-    ) +
+      col = species) +
+  geom_point() +
   scale_colour_manual( #<<
     values = peng_colour #<<
   ) #<<
@@ -261,13 +239,10 @@ ggplot(data = penguins) +
 ## Changing colours: palettes
 ```{r peng_col3, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      col = species
-      )
-    ) +
+      col = species) +
+  geom_point() +
   scale_colour_viridis_d() #<<
 ```
 ]
@@ -283,13 +258,10 @@ ggplot(data = penguins) +
 ## Changing colours: palettes
 ```{r peng_col4, eval=FALSE}
 ggplot(data = penguins) +
-  geom_point(
-    mapping = aes(
-      x = flipper_length_mm,
+  aes(x = flipper_length_mm,
       y = body_mass_g,
-      col = species
-      )
-    ) +
+      col = species) +
+  geom_point() +
   scale_colour_brewer( #<<
     palette = "Dark2" #<<
     ) #<<
