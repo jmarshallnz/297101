@@ -1,6 +1,8 @@
 ---
 title: "Workshop 6: Finding the Former MP for Wairarapa's Former Ute"
-output: html_document
+format:
+  html:
+    embed-resources: true
 ---
 
 ## Introduction
@@ -9,7 +11,8 @@ Today we'll be looking at a subset from the NZTA fleet data. This holds registra
 
 We have a subset of it which is loaded below. If you're on a slower internet connect, you might want to download the data from the URL and load it locally.
 
-```{r message=FALSE}
+```{r}
+#| message: false
 library(tidyverse)
 
 fleet <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/fleet.csv.gz")

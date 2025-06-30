@@ -1,23 +1,27 @@
 ---
 title: "Workshop 6: Finding the Former MP for Wairarapa's Former Ute"
-output: html_document
+format: html
+execute:
+  echo: false
+  message: false
+  warning: false
 ---
 
 Today we'll use a new dataset based on a subset of the NZTA fleet data. You can grab the whole lot (all 1.1GB of it) here if you're interested:
 
-https://nzta.govt.nz/resources/new-zealand-motor-vehicle-register-statistics/new-zealand-vehicle-fleet-open-data-sets/#data
+[https://nzta.govt.nz/resources/new-zealand-motor-vehicle-register-statistics/new-zealand-vehicle-fleet-open-data-sets/#data](https://nzta.govt.nz/resources/new-zealand-motor-vehicle-register-statistics/new-zealand-vehicle-fleet-open-data-sets/#data)
 
 We'll be looking at a smaller subset of this and using it to, among other things, find the former Wairarapa Member of Parliament's old ute (he's since sold it).
 
-Start by downloading `lab06.Rmd` and load it into RStudio.
+Start by downloading `lab06.qmd` and load it into RStudio.
 
-https://www.massey.ac.nz/~jcmarsha/297101/labs/lab06.Rmd
+[https://www.massey.ac.nz/~jcmarsha/297101/labs/lab06.qmd](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab06.qmd)
 
 We're going to be looking at three things with these data:
 
 1. Reproducing the below plot on how colours come in and out of fashion
 
-```{r, echo=FALSE, warning=FALSE, message=FALSE}
+```{r}
 library(tidyverse)
 fleet <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/fleet.csv.gz")
 fleet |> filter(VEHICLE_TYPE == "PASSENGER CAR/VAN") |>
@@ -39,4 +43,4 @@ fleet |> filter(VEHICLE_TYPE == "PASSENGER CAR/VAN") |>
 
 3. Finding the former MP for Wairarapa's former Ute.
 
-**Read through the `lab06.Rmd` file and work on the exercises within.**
+**Read through the `lab06.qmd` file and work on the exercises within.**
