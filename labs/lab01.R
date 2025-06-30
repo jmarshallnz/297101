@@ -14,6 +14,7 @@ data(quakes)
 # Let's plot the earthquake magnitude versus the number
 # of stations that detect them
 ggplot(data=quakes) +
-  geom_point(mapping=aes(x=mag, y=stations))
+  aes(x=mag, y=stations) +
+  geom_point()
 
 # You can add more code or comments below here.
