@@ -1,6 +1,8 @@
 ---
 title: "Workshop 5: Joining datasets, small multiple plots and making tidy data wide"
-output: html_document
+format:
+  html:
+    embed-resources: true
 ---
 
 ## Introduction
@@ -9,7 +11,8 @@ Today we'll use a new dataset for schools alongside the school roll data. Both a
 
 https://www.educationcounts.govt.nz/statistics/school-rolls
 
-```{r setup, message=FALSE}
+```{r}
+#| message: false
 library(tidyverse)
 
 roll <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/schools/roll.csv")
@@ -29,7 +32,8 @@ In the last workshop you produced a chart of the total number of students by yea
 clean |> group_by(Level) |>
   summarise(Total = sum(Students)) |>
   ggplot() +
-  geom_col(aes(x=Level, y=Total))
+  aes(x=Level, y=Total) +
+  geom_col()
 ```
 
 This is an interesting chart as there is an unexpected peak at Level 7 (caused by a reclassification of students at year 7/8) and also it is interesting to see the decrease as students leave school early.
@@ -47,10 +51,12 @@ An alternate is to produce a plot for each ethnicity. We could just go ahead and
 ```{r}
 eu_year_by_level <- clean |> filter(EthnicGroup == "European") |> group_by(Level) |> summarise(Total = sum(Students))
 ggplot(eu_year_by_level) +
-  geom_col(mapping=aes(x=Level, y=Total))
+  aes(x=Level, y=Total) +
+  geom_col()
 as_year_by_level <- clean |> filter(EthnicGroup == "Asian") |> group_by(Level) |> summarise(Total = sum(Students))
 ggplot(as_year_by_level) +
-  geom_col(mapping=aes(x=Level, y=Total))
+  aes(x=Level, y=Total) +
+  geom_col()
 ```
 
 But that gets quite awkward! Fortunately, `ggplot` can do grouping for us via the `facet_wrap` or `facet_grid` commands. These produce what is known as 'small multiple' plots - basically divide the plot up into subplots, and in each subplot we show a different group with consistent style/axes etc. 
@@ -60,7 +66,8 @@ To do this, we'll need to group by EthnicGroup as well as Level, and then use `f
 ```{r}
 ethnicity_by_year <- clean |> group_by(EthnicGroup, Level) |> summarise(Total = sum(Students))
 ggplot(ethnicity_by_year) +
-  geom_col(mapping=aes(x=Level, y=Total)) +
+  aes(x=Level, y=Total) +
+  geom_col() +
   facet_wrap(vars(EthnicGroup))
 ```
 
@@ -118,7 +125,8 @@ all_data |>
   group_by(Takiwa, EthnicGroup, Level) |>
   summarise(Total = sum(Students)) |>
   ggplot() +
-  geom_col(mapping=aes(x=Level, y=Total)) +
+  aes(x=Level, y=Total) +
+  geom_col() +
   facet_wrap(vars(Takiwa, EthnicGroup))
 ```
 
