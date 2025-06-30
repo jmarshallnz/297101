@@ -1,12 +1,11 @@
 ---
 title: "Workshop 2: Other geometries, and labelling our charts"
-output: html_document
+format: html
+execute:
+  eval: false
 ---
 
-Our goal in this second set of exercises is to extend our knowledge of ggplot, looking at some other geometries and
-learning how to label our charts for the reader.
-
-**NOTE: The chart you produce in this exercise will form part of your assessment, so you must export it at the end and submit it on stream. You'll also want to save your script somewhere safe in case you need to reproduce the chart later!**
+Our goal in this second set of exercises is to extend our knowledge of ggplot, looking at some other geometries and learning how to label our charts for the reader.
 
 ## Before we start
 
@@ -14,13 +13,13 @@ You should have worked through workshop 1 before trying this workshop. In there 
 
 Both of these are detailed here:
 
-https://r-resources.massey.ac.nz/help/usingrin297.101.html
+[https://r-resources.massey.ac.nz/help/usingrin297.101.html](https://r-resources.massey.ac.nz/help/usingrin297.101.html)
 
 ## Loading up the R script
 
 Start by downloading lab02.R to somewhere on your computer. The easiest way to do this is to right click on the URL below and "Save file as..."
 
-https://www.massey.ac.nz/~jcmarsha/297101/labs/lab02.R
+[https://www.massey.ac.nz/~jcmarsha/297101/labs/lab02.R](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab02.R)
 
 Then load it into RStudio. The fail-safe way to do that is to first load RStudio up, and then use the File->Open File... option (alternatively the folder button on the toolbar), browsing to where the file was saved, and loading it up.
 
@@ -30,28 +29,30 @@ Then load it into RStudio. The fail-safe way to do that is to first load RStudio
 
 In workshop 1 you tried using a different geometry layer. Well, not really: the `geom_jitter` is just a short-hand convenience for `geom_point` paired with `position_jitter()`. Now we're going to try some *actual* alternate geometries. Let's try summarising the **trend** using `geom_smooth`:
 
-1. Try the following:
+1.  Try the following:
 
-    ```{r, eval=FALSE}
+    ```{r}
     ggplot(data=quakes) +
-      geom_smooth(mapping=aes(x=mag, y=stations))
+      aes(x=mag, y=stations) +
+      geom_smooth()
     ```
     
     What do you think this is doing? What do you think the black bit and the transparent "band" represent? Did the trend come out as you expect? Write some notes in your R script about this.
     
-2. Showing just the trend, without the data can be useful in some circumstances for focusing on the "important" bits (this idea is called statistical inference). But, we lose information when we do this, as we just see trend, and don't have a good feel for the scatter about the trend! We know that some magnitude 5 quakes are felt at more stations than others for example, while the smooth trend just tells us the "average" value. One way to solve this is to use both:
+2.  Showing just the trend, without the data can be useful in some circumstances for focusing on the "important" bits (this idea is called statistical inference). But, we lose information when we do this, as we just see trend, and don't have a good feel for the scatter about the trend! We know that some magnitude 5 quakes are felt at more stations than others for example, while the smooth trend just tells us the "average" value. One way to solve this is to use both:
 
-    ```{r, eval=FALSE}
+    ```{r}
     ggplot(data=quakes) +
-      geom_point(mapping=aes(x=mag, y=stations)) +
-      geom_smooth(mapping=aes(x=mag, y=stations))
+      aes(x=mag, y=stations) +
+      geom_point() +
+      geom_smooth()
     ```
     
     You might want to explore adding some transparency to push the points into the background a little, and/or using some colour for the smoother or points to help balance the plot.
 
-3. In the above code there is some *repetition*: the `aes()` bit is specified in each of the geometries. This means more typing, and more changes to make a mistake (e.g. if you adapt this code for another dataset you'd need to change the same thing in multiple locations, and you might miss one!) We can simplify the code a bit by noting that the `ggplot()` function also has a `mapping` argument, and that the mapping is inherited by the `geom_*()` functions:
+3.  In the above code we wrote the aesthetics command as a separate line. This is one option, but there are two others available to us which can be useful. The first is that we can also specify the aesthetic mapping via the `mapping` argument of `ggplot()`:
 
-    ```{r, eval=FALSE}
+    ```{r}
     ggplot(data=quakes,
            mapping=aes(x=mag, y=stations)) +
       geom_point() +
@@ -59,45 +60,55 @@ In workshop 1 you tried using a different geometry layer. Well, not really: the 
     ```
 
     Add that code to your R script and make sure it gives you what you expect.
-    
-4. Sometimes we want individual layers to have different aesthetics. e.g. we might want our points to be coloured by `depth`. We can do that by adding an additional mapping in there:
 
-    ```{r, eval=FALSE}
-    ggplot(data=quakes,
-           mapping=aes(x=mag, y=stations)) +
+4.  There's not much advantage to this over using a separate `aes()` line. Another alternative is noting that each of the `geom_*()` functions also have a `mapping` argument, so we could write it like this:
+
+    ```{r}
+    ggplot(data=quakes) +
+      geom_point(mapping=aes(x=mag, y=stations)) +
+      geom_smooth(mapping=aes(x=mag, y=stations))
+    ```
+    
+    This involves some repetition which is generally not a great idea as you double the chance of a typo, or give yourself two places to change things in future.
+
+5.  Sometimes we want individual layers to have different aesthetics. e.g. we might want our points to be coloured by `depth`. We can do that by adding an additional mapping in there:
+
+    ``` {r}
+    ggplot(data=quakes) +
+      aes(x=mag, y=stations) +
       geom_point(mapping=aes(colour=depth)) +
       geom_smooth()
     ```
     
     Add that code to your R script and check it does what you expect.
 
-5. What happens if you try and put the `colour=depth` line into the mapping argument of `ggplot` instead? You should get a warning about an aesthetic being dropped because the `group` aesthetic wasn't specified, or a numerical variable wasn't converted to a factor.
+6.  What happens if you try and put the `colour=depth` line into the main `aes()` argument instead? You should get a warning about an aesthetic being dropped because the `group` aesthetic wasn't specified, or a numerical variable wasn't converted to a factor.
 
     This is because the smoother doesn't know what to do with a numeric version of `colour` - we'll come back to this in workshop 3. For now, add a comment to your R script as to why this is happening.
 
-6. The 'smooth trend' that we've added via `geom_smooth()` is a *general additive model* which is basically fitting a series of curves that smoothly transition from one another (splines) to the data. An alternate method of smoothing is to use a LOESS (local linear smoother) which can be done via:
-
-    ```{r, eval=FALSE}
-    geom_smooth(mapping=aes(x=mag, y=stations), method='loess', span=0.75)
-    ```
+7.  The 'smooth trend' that we've added via `geom_smooth()` is a *general additive model* which is basically fitting a series of curves that smoothly transition from one another (splines) to the data. An alternate method of smoothing is to use a LOESS (local linear smoother) which can be done via:
     
+    ``` {r}
+    geom_smooth(method='loess', span=0.75)
+    ```
+
     Try that instead - you might not notice a huge change as all we've done is change the method of smoothing, and we have a lot of points here.
     
     The loess smoother works by fitting a straight line (the linear part of local linear smoother) to the data around each point (the local part of local linear smoother) by utilising a subset of the points surrounding it (and weighting points close to the one we're at more than points further away). The `span` argument is the amount of the data considered at each step. Small values of the `span` argument uses less data for each piece of the trend, allowing the trend to adapt quickly to small changes in the data, leading to more flexibility, but potentially highlighting noise. Larger values of `span` use more of the data for each piece of the trend, smoothing over small fluctuations, but also potentially smoothing over signal in the data.
 
     This concept is known as the **Bias-Variance trade-off** and is a key idea in statistics! We will be seeing that repeatedly in this class. The idea is best explained by thinking about what will happen if you have lots of different samples of data from the same population. These samples will on average look the same, but each one will be different. If the `span` is too small then the smooths will all look different (have high variance) but on average they will faithfully represent the true trend (represents the truth, so is unbiased). If the `span` is too large, then all the smooths will look very similar (have low variance) and each one will be a bit off in places due to smoothing too much, so won't represent the true trend on average (so will be biased). There is thus a "goldilocks" value of the `span` that balances these two concepts, trading off a bit of variance for a bit of bias or vice-versa, hoping to minimise both!
 
-7. Try varying the `span` argument from (say) 0.4 up to 1 and see what the result is. You should note that with `span=0.4` you'll get some slight fluctuations at the lower `mag` values which smooths out as you increase the `span`. With large values (`span=1`) the trend at the higher magnitudes should be a straight line.
+8.  Try varying the `span` argument from (say) 0.4 up to 1 and see what the result is. You should note that with `span=0.4` you'll get some slight fluctuations at the lower `mag` values which smooths out as you increase the `span`. With large values (`span=1`) the trend at the higher magnitudes should be a straight line.
 
-8. What do you think is a suitable `span` value for best representing the trend? It's OK to give a range! Write some notes about this in your R script.
+9.  What do you think is a suitable `span` value for best representing the trend? It's OK to give a range! Write some notes about this in your R script.
 
 ## Labelling our chart
 
 Just about everything on a `ggplot` can be customised, including the overall look of it. One of the easiest things to change is the labels assigned to the chart. The `labs()` command can be used to change the x/y axis labels, or to add a title, subtitle and caption.
 
-9. Try changing the x-axis label from "mag" to "Magnitude" using
+10. Try changing the x-axis label from "mag" to "Magnitude" using
 
-    ```{r, eval=FALSE}
+    ```{r}
     labs(x = "Magnitude")
     ```
     
@@ -105,18 +116,12 @@ Just about everything on a `ggplot` can be customised, including the overall loo
     
     Remember that this will need to be added on to your previous ggplot by putting a `+` on the line before.
     
-10. Change the y-axis label to "Number of stations felt" or similar.
+11. Change the y-axis label to "Number of stations felt" or similar.
 
-11. Try adding a title to the chart using `title = "My cool chart"` in the `labs()` function. Think about what would make a good title. Feel free to editorialise a bit! e.g. imagine if you were publishing this chart on your social media - what would you want the key message of the chart to be? You can help direct your reader to that message with the title. You might want a subtitle as well via `subtitle = "Something to add here"`.
+12. Try adding a title to the chart using `title = "My cool chart"` in the `labs()` function. Think about what would make a good title. Feel free to editorialise a bit! e.g. imagine if you were publishing this chart on your social media - what would you want the key message of the chart to be? You can help direct your reader to that message with the title. You might want a subtitle as well via `subtitle = "Something to add here"`.
 
-12. Let's add some colour to the chart by colouring the points by `depth` - remember it goes inside the `aes()`. This will also have a label, which can be changed with `labs(colour = "My new label")`.
+13. Let's add some colour to the chart by colouring the points by `depth` - remember it goes inside the `aes()`. This will also have a label, which can be changed with `labs(colour = "My new label")`.
 
     *The arguments to labs are the names of the corresponding aesthetics*.
-
-13. Once you're happy with your final chart, export it to a PNG to a safe place. You can do this by clicking on the "Export" button and then "Save as image...".
-
-    *You can resize your chart as you wish in this view, then save it in a place where you can find it later.*
-
-14. Upload your chart to stream as the assessment for this workshop.
 
 Finally, finish up by going through your R script and adding some comments to anything you don't find clear. Then save your script in a safe place!
