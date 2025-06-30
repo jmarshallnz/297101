@@ -1,13 +1,7 @@
 ---
 title: "297.101 Statistical Data Science"
 subtitle: "Workshops"
-output:
-  html_document:
-    mathjax: null
-    highlight: null
-    self_contained: false
-    theme: null
-    css: default.css
+format: html
 ---
 
 The goal of these workshops is to gain familiarity with the way that statisticians work: using software (R/RStudio) to manipulate, transform, and visualise data.
@@ -18,7 +12,7 @@ Make sure you have both R and RStudio installed. In addition, make sure you have
 
 Both of these are detailed here:
 
-https://r-resources.massey.ac.nz/help/usingrin297.101.html
+[https://r-resources.massey.ac.nz/help/usingrin297.101.html](https://r-resources.massey.ac.nz/help/usingrin297.101.html)
 
 ## Workshops
 
