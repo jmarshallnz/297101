@@ -1,6 +1,5 @@
 ---
-title: "Workshop 3: Single and grouped numeric variables, RMarkdown"
-output: html_document
+title: "Workshop 3: Single and grouped numeric variables, Quarto"
 ---
 
 In this exercise we'll look at plots of a single or grouped numeric variables. In that case we're interested in the distribution of the variable, which can usually be described in terms of:
@@ -11,13 +10,13 @@ In this exercise we'll look at plots of a single or grouped numeric variables. I
 
 In the case where we also have a grouping variable, we might be interested in how the above measures differ from group to group.
 
-We'll also look at R Markdown - a way to combine narrative writing with code and output from analyses to create reproducible reports.
+We'll also look at Quarto - a way to combine narrative writing with code and output from analyses to create reproducible reports.
 
-Start by downloading lab03.Rmd and load it into RStudio. The easiest way to do this is to right click on the URL below and "Save file as..."
+Start by downloading lab03.qmd and load it into RStudio. The easiest way to do this is to right click on the URL below and "Save file as..."
 
-https://www.massey.ac.nz/~jcmarsha/297101/labs/lab03.Rmd
+[https://www.massey.ac.nz/~jcmarsha/297101/labs/lab03.qmd](https://www.massey.ac.nz/~jcmarsha/297101/labs/lab03.qmd)
 
-1. Read through this markdown document. You'll notice that it combines plain text writing as well as various embellishments such as headings, italics, bold and the like.
+1. Read through this quarto document. You'll notice that it combines plain text writing as well as various embellishments such as headings, italics, bold and the like.
 
 2. In addition there are R code blocks included, which will allow you to add some analysis alongside the markdown writing.
 

@@ -1,22 +1,24 @@
 ---
 title: "Workshop 3: The distribution of numeric variables and R Markdown"
-output: html_document
+format:
+  html:
+    embed-resources: true
 ---
 
 ## Introduction
 
-In this exercise we have an example of R Markdown - a way to combine narrative writing with code and output from analyses to create reproducible reports.
+In this exercise we have an example of Quarto - a way to combine narrative writing with code and output from analyses to create reproducible reports.
 
-This is a markdown document. You'll notice as you read through it that it combines plain text writing (like this sentence) as well as various embellishments **like this**, or like the Introduction heading above.
+This is a Quarto document. You'll notice as you read through it that it combines plain text writing (like this sentence) as well as various embellishments **like this**, or like the Introduction heading above. This is a **markdown** language. A bit like HTML but much simpler.
 
 The embellishments allow the text to be formatted - the two asterixes around words signifies **bold** while one asterix signifies *italics*.
 
 We can also format text up by using bullet points, lists, headings, subheadings etc. The document is then 'rendered' to produce an HTML report or to produce reports in other formats (PDF, Microsoft Word).
 
-In this markdown document, we'll learn about:
+In this quarto document, we'll learn about:
 
  - some basic markdown formatting
- - how to 'knit' a document to create an HTML
+ - how to 'Render' a document to create an HTML
  - how R 'code chunks' can be included
  - plotting options for the distribution of a numeric variable, and comparing them across groups.
 
@@ -49,14 +51,15 @@ We can also do plotting, which again is shown inline. In the chunk below we look
 
 ```{r}
 ggplot(data=quakes) +
-  geom_histogram(mapping=aes(x=mag))
+  aes(x=mag) +
+  geom_histogram()
 ```
 
 We'll come back to this in a bit, but the idea is this gives us the **distribution** of the magnitudes. It does so by dividing the range of magnitudes (from 4.0 to 6.4) into 30 "bins" or small, non-overlapping ranges. It then counts how many earthquakes there are in each of those magnitude ranges and draws a bar that high. e.g. the left-most bar contains all the 4.0 magnitude earthquakes - there are 46 of them.
 
 *Sidenote: You could check this yourself! Double click on the `quakes` entry in the Environment tab to give a spread-sheet style look at the data. Then click on the `mag` column to order by that and see roughly how many 4.0's there are.*
 
-Once we've finished the analysis in our markdown document, we can `Knit` it (with the button on the toolbar) which:
+Once we've finished the analysis in our markdown document, we can `Render` it (with the button on the toolbar) which:
 
 1. Creates a new R session with a clean slate (no variables, data or packages loaded)
 2. Executes each R chunk in turn.
@@ -77,7 +80,8 @@ Try this now!
 
 ```{r}
 ggplot(data=quakes) +
-  geom_histogram(mapping=aes(x=mag), bins=20)
+  aes(x=mag) +
+  geom_histogram(bins=20)
 ```
 
     You should notice the shape of the distribution has changed a bunch! Why is this do you think? You might want to think about (and write some notes) as to why the first plot has gaps in it, but this one doesn't.
@@ -94,7 +98,8 @@ ggplot(data=quakes) +
 
 ```{r}
 ggplot(data=quakes) +
-  geom_density(mapping=aes(x=mag))
+  aes(x=mag) +
+  geom_density()
 ```
 
     This produces a smooth curve that follows the same form as the histogram: the idea is that it has a bit less "noise" than the histogram introduces, as the density is drawn with smooth curves (usually normal distribution shapes!) rather than rectangles. The y-axis here has been scaled so that the area under the curve is 1 (rather than the number of earthquakes like in the histogram).
@@ -111,7 +116,8 @@ ggplot(data=quakes) +
 
 ```{r}
 ggplot(data=quakes) +
-  geom_boxplot(mapping=aes(x=mag))
+  aes(x=mag) +
+  geom_boxplot()
 ```
 
     In this representation, only the x-axis matters, the y-axis is completely arbitrary. The 'box' here represents the interquartile range - i.e. it goes from the lower quartile up to the upper quartile, capturing 50% of the data. The line inside the box is the median (i.e. the middle value). The "whiskers" on either side go from the quartiles to the minimum or maximum.
@@ -132,7 +138,8 @@ The code below creates a new version of the quakes data where we categorise the 
 quakes_cat <- mutate(quakes, how_deep = if_else(depth < 300, "shallow", "deep"))
 
 ggplot(data=quakes_cat) +
-  geom_boxplot(mapping=aes(x=mag, y=how_deep))
+  aes(x=mag, y=how_deep) +
+  geom_boxplot()
 ```
 
 8. What is your conclusion would you make about the distribution of magnitude for shallow and deep quakes? Add some notes below.
@@ -141,5 +148,5 @@ ggplot(data=quakes_cat) +
 
 10. You can also introduce the grouping variable in a histogram or density via `fill` or `col` to show how the shape changes by group. You might ned to experiment with the `position` argument for the histogram (e.g. try `position="identity"`), or `alpha` argument for densities if you use `fill` to colour them.
 
-Finally, Knit your document to make sure your work is reproducible. If you have an error, see if you can figure out what it is, or ask your classmates or teaching staff.
+Finally, Render your document to make sure your work is reproducible. If you have an error, see if you can figure out what it is, or ask your classmates or teaching staff.
 
