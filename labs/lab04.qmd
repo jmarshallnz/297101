@@ -1,6 +1,8 @@
 ---
 title: "Workshop 4: Data wrangling"
-output: html_document
+format:
+  html:
+    embed-resources: true
 ---
 
 ## Introduction
@@ -11,7 +13,9 @@ https://www.educationcounts.govt.nz/statistics/school-rolls
 
 We'll start by reading the data in. If you're on a slower internet connect, you might want to download the data from the URL and load it locally.
 
-```{r message=FALSE}
+```{r}
+#| message: false
+
 library(tidyverse)
 
 roll <- read_csv("https://www.massey.ac.nz/~jcmarsha/data/schools/roll.csv")
@@ -22,11 +26,11 @@ roll
 
 You should see there are 66,261 rows for 4 different variables (`School`, `EthnicGroup`, `Level`, `Students`)
 
-*Notice how we've added `message=FALSE` to the R code chunk above - this will stop R from putting messages in the resulting document - messages are output given by R about what it's doing that isn't actually output, such as the messages about which tidyverse version is being loaded*
+*Notice how we've added `message=FALSE` as a code chunk option above - this will stop R from putting messages in the resulting document - messages are output given by R about what it's doing that isn't actually output, such as the messages about which tidyverse version is being loaded*
 
 We'll be using the `dplyr` package in the `tidyverse` to manipulate the data.
 
-**Make sure you can Knit this document successfully before you make changes.**
+**Make sure you can Render this document successfully before you make changes.**
 
 ## Using `filter` to select rows
 
@@ -120,7 +124,7 @@ And be read "Take roll, filter so that EthnicGroup is International fee paying, 
 
 ### Try yourself
 
-Try doing a few of the above exercises utilising the pipe instead. i.e. all statements should start `roll |>`
+Try re-doing some previous exercises utilising the pipe. i.e. all statements should start `roll |>`
 
 ## Using `select` to select columns
 
