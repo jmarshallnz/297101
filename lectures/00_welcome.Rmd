@@ -30,10 +30,10 @@ knitr::opts_chunk$set(fig.dim=c(4.8, 4.5), fig.retina=2, out.width="100%")
 
 In order of appearance:
 
-Jonathan Marshall         |  Jonathan Godfrey          | Mat Pawley
+Jonathan Marshall         |  Jonathan Godfrey          | Nick Knowlton Pawley
 --------------------------|----------------------------|--------------------------
-j.c.marshall@massey.ac.nz |   a.j.godfrey@massey.ac.nz | m.pawley@massey.ac.nz
-Manawatu ScB3.17          |   Manawatu ScB3.15         | Albany MS3.08
+j.c.marshall@massey.ac.nz |   a.j.godfrey@massey.ac.nz | n.knowlton@massey.ac.nz
+Manawatu ScB3.17          |   Manawatu ScB3.15         | Albany
 
 ---
 
@@ -43,7 +43,7 @@ Manawatu ScB3.17          |   Manawatu ScB3.15         | Albany MS3.08
 
 - Charting and visualisation with `ggplot2`.
 
-- Reproducible analysis with `rmarkdown`.
+- Reproducible analysis with `Quarto`.
 
 - Data wrangling with `dplyr`.
 
@@ -86,6 +86,37 @@ https://r-resources.massey.ac.nz/help/usingrin297.122.html
     https://www.google.com/search?q=%s&udm=14
 
 - Check the date of the google responses: older results might well be out of date.
+
+---
+
+## Use of LLMs
+
+- Learning is hard. It is frustrating. It requires failure. It takes time and effort.
+
+- LLMs offer a tempting shortcut. They're good at giving you code to answer questions!
+
+- **BUT:** Those shortcuts mean you won't learn.
+
+- Using them for "search" is OK, but the usual caveats apply.
+
+    - How do you know what it is giving you is correct?
+    - Do you have enough base knowledge to distinguish good results from bad?
+    - Will you know if the 'answer' is just made up?
+
+---
+
+## Use of LLMs
+
+- For coding, you only benefit from an LLM helper if it is only doing the bits you can
+already do! i.e. they're great for boiler plate stuff as they give you more time for thinking.
+
+- Don't let them do the "thinking" for you. They cannot do this!
+
+- The AI use policy for the course is on the assessments page.
+
+- You may be asked to explain your answer via zoom if you are suspected of presenting work that is not your own.
+
+- We think the content in this course is worth learning. Hopefully you will to!
 
 ---
 
@@ -134,6 +165,8 @@ https://r-resources.massey.ac.nz/help/usingrin297.122.html
 - Watch whenever you want.
 
 - Don't always have to watch the videos before doing the workshop, but you should watch and take notes from them all.
+
+- One hour Q&A sessions each week at Manawatu and Albany. No new material discussed.
 
 ---
 
