@@ -214,7 +214,7 @@ class: middle, inverse
 ---
 
 .left-code[
-## Quite a lot to type
+## Not too much to type (yet!)
 ```{r quakes, eval=FALSE}
 ggplot(data = quakes) +
   aes(x = long, y = lat) +
@@ -308,17 +308,13 @@ All our charts will follow the same basic recipe. We might just add a few more i
 .left-code[
 ## Recipe
 ```{r peng2, eval=FALSE}
-ggplot(data = penguins) + #<<
-  aes(x = flipper_length_mm,
-      y = body_mass_g) +
-  geom_point()
+ggplot(data = penguins)
 ```
 Tell `ggplot` what data we want to plot.
 ]
 
 .right-plot[
-```{r, echo=FALSE}
-ggplot(data = penguins)
+```{r, ref.label="peng2", echo=FALSE}
 ```
 ]
 
@@ -328,18 +324,14 @@ ggplot(data = penguins)
 ## Recipe
 ```{r peng3, eval=FALSE}
 ggplot(data = penguins) +
-  aes(x = flipper_length_mm, #<<
-      y = body_mass_g) + #<<
-  geom_point()
+  aes(x = flipper_length_mm,
+      y = body_mass_g)
 ```
 Map features of the plot to columns in the data.
 ]
 
 .right-plot[
-```{r, echo=FALSE}
-ggplot(data = penguins) +
-  aes(x = flipper_length_mm,
-      y = body_mass_g)
+```{r, ref.label="peng3", echo=FALSE}
 ```
 ]
 
@@ -351,7 +343,7 @@ ggplot(data = penguins) +
 ggplot(data = penguins) +
   aes(x = flipper_length_mm,
       y = body_mass_g) +
-  geom_point() #<<
+  geom_point()
 ```
 
 Select a geometry for the plot.
