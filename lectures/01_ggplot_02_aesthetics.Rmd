@@ -114,6 +114,16 @@ To **map to a column of data** place inside the `aes()` function.
 
 ---
 
+## Aesthetic mapping
+
+```{r}
+aes(x = flipper_length_mm, 
+    y = body_mass_g,
+    colour = species)
+```
+
+---
+
 ## Mapping aesthetics
 
 Aesthetics are mapped to data via the `aes()` function. This `mapping` is then passed on to each geometry layer.
@@ -126,35 +136,6 @@ to which parts of your data.
 e.g. the `x` and `y` aesthetics automatically have an axis scale. The `colour` aesthetic will give a legend or colour scale.
 
 **Any time you want a feature of the plot to change based on data, it needs to be in `aes()`**
-
----
-
-## Different species
-
-```{r}
-aes(x = flipper_length_mm, 
-    y = body_mass_g,
-    colour = species)
-```
-
----
-
-.left-code[
-## Different species
-```{r peng8, eval=FALSE}
-ggplot(data = penguins) +
-  aes(x = flipper_length_mm,
-      y = body_mass_g,
-      colour = species) + #<<
-  geom_point()
-```
-`colour` changes with data (mapping).
-]
-
-.right-plot[
-```{r, ref.label="peng8", echo=FALSE}
-```
-]
 
 ---
 
