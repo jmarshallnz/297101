@@ -30,7 +30,7 @@ knitr::opts_chunk$set(fig.dim=c(4.8, 4.5), fig.retina=2, out.width="100%")
 
 In order of appearance:
 
-Jonathan Marshall         |  Jonathan Godfrey          | Nick Knowlton Pawley
+Jonathan Marshall         |  Jonathan Godfrey          | Nick Knowlton
 --------------------------|----------------------------|--------------------------
 j.c.marshall@massey.ac.nz |   a.j.godfrey@massey.ac.nz | n.knowlton@massey.ac.nz
 Manawatu ScB3.17          |   Manawatu ScB3.15         | Albany
