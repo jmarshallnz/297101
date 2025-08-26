@@ -22,6 +22,6 @@ Start by downloading lab03.qmd and load it into RStudio. The easiest way to do t
 
 3. When you "Knit" the markdown document (using the "Knit" button on the toolbar) you'll get all the analyses in R code blocks run and the code and output will be placed inline with the writing. This will produce an HTML "Notebook" that contains everything nicely formatted up.
 
-The instructions for this workshop are contained in `lab03.Rmd`, so read through and answer questions in that document.
+The instructions for this workshop are contained in `lab03.qmd`, so read through and answer questions in that document.
 
 **Once you've completed the workshop, make sure you can knit it properly to ensure it is reproducible.**

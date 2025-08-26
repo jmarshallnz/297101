@@ -17,10 +17,10 @@ We can also format text up by using bullet points, lists, headings, subheadings 
 
 In this quarto document, we'll learn about:
 
- - some basic markdown formatting
- - how to 'Render' a document to create an HTML
- - how R 'code chunks' can be included
- - plotting options for the distribution of a numeric variable, and comparing them across groups.
+-   some basic markdown formatting
+-   how to 'Render' a document to create an HTML
+-   how R 'code chunks' can be included
+-   plotting options for the distribution of a numeric variable, and comparing them across groups.
 
 ## Headings
 
@@ -61,22 +61,22 @@ We'll come back to this in a bit, but the idea is this gives us the **distributi
 
 Once we've finished the analysis in our markdown document, we can `Render` it (with the button on the toolbar) which:
 
-1. Creates a new R session with a clean slate (no variables, data or packages loaded)
-2. Executes each R chunk in turn.
-3. Converts the markdown formatted text to HTML.
-4. Combines everything into a single HTML document.
+1.  Creates a new R session with a clean slate (no variables, data or packages loaded)
+2.  Executes each R chunk in turn.
+3.  Converts the markdown formatted text to HTML.
+4.  Combines everything into a single HTML document.
 
 Try this now!
 
 ### Your turn
 
-1. Go through and have a play with the markdown syntax to get various things bolded or in italics (or written in `code` font). There's an R Markdown cheat sheet available under the `Help` menu.
+1.  Go through and have a play with the markdown syntax to get various things bolded or in italics (or written in `code` font). There's an R Markdown cheat sheet available under the `Help` menu.
 
-2. The block of code at the top of the markdown file (with the title and output mode defined) is called a "metadata" block. This is where you can add things like the author or date, as well as control how the final document is created in finer detail. Try adding an author field here with your name.
+2.  The block of code at the top of the markdown file (with the title and output mode defined) is called a "metadata" block. This is where you can add things like the author or date, as well as control how the final document is created in finer detail. Try adding an author field here with your name.
 
 ## Distribution of numeric variables
 
-1. Above we did a histogram of earthquake magnitudes. By default the histogram divides the range of the numeric variable into 30 bins. But potentially a smaller (or larger) number of bins may suit. We can alter this with the `bins` argument:
+1.  Above we did a histogram of earthquake magnitudes. By default the histogram divides the range of the numeric variable into 30 bins. But potentially a smaller (or larger) number of bins may suit. We can alter this with the `bins` argument:
 
 ```{r}
 ggplot(data=quakes) +
@@ -84,17 +84,19 @@ ggplot(data=quakes) +
   geom_histogram(bins=20)
 ```
 
-    You should notice the shape of the distribution has changed a bunch! Why is this do you think? You might want to think about (and write some notes) as to why the first plot has gaps in it, but this one doesn't.
-  
-2. Try altering the number of bins a bit more. What is your conclusion on the shape of the distribution?
+```         
+You should notice the shape of the distribution has changed a bunch! Why is this do you think? You might want to think about (and write some notes) as to why the first plot has gaps in it, but this one doesn't.
+```
 
-   - Think about what the "range" or "spread" of the data is.
-   - What is the "typical" value, or perhaps a smaller range where most of the earthquakes lie?
-   - Is the distribution symmetric? Or are there a few really big earthquakes whereas most are small?
-   
-   *These ideas are **spread**, **center** and **shape** and are what we try and always reference when describing distributions of numeric variables.*
+2.  Try altering the number of bins a bit more. What is your conclusion on the shape of the distribution?
 
-3. There are a couple of other plot types we might use for distributions. The next is a kernel density estimate:
+    -   Think about what the "range" or "spread" of the data is.
+    -   What is the "typical" value, or perhaps a smaller range where most of the earthquakes lie?
+    -   Is the distribution symmetric? Or are there a few really big earthquakes whereas most are small?
+
+    *These ideas are **spread**, **center** and **shape** and are what we try and always reference when describing distributions of numeric variables.*
+
+3.  There are a couple of other plot types we might use for distributions. The next is a kernel density estimate:
 
 ```{r}
 ggplot(data=quakes) +
@@ -102,17 +104,19 @@ ggplot(data=quakes) +
   geom_density()
 ```
 
-    This produces a smooth curve that follows the same form as the histogram: the idea is that it has a bit less "noise" than the histogram introduces, as the density is drawn with smooth curves (usually normal distribution shapes!) rather than rectangles. The y-axis here has been scaled so that the area under the curve is 1 (rather than the number of earthquakes like in the histogram).
-    
-    What would be your conclusion about center, spread and shape from the above representation?
+```         
+This produces a smooth curve that follows the same form as the histogram: the idea is that it has a bit less "noise" than the histogram introduces, as the density is drawn with smooth curves (usually normal distribution shapes!) rather than rectangles. The y-axis here has been scaled so that the area under the curve is 1 (rather than the number of earthquakes like in the histogram).
 
-4. The density plot has a parameter that controls how smooth the resulting distribution is, called the bandwidth, which controls how pointy or flat the underlying normal distribution shapes that are combined to give the final distribution. This is similar to the `bins` argument of histogram. You can control this with the `adjust` argument. Values less than 1 make the curve closer to the particular dataset you have (and less smooth), while values greater than 1 make the curve smoother.
+What would be your conclusion about center, spread and shape from the above representation?
+```
+
+4.  The density plot has a parameter that controls how smooth the resulting distribution is, called the bandwidth, which controls how pointy or flat the underlying normal distribution shapes that are combined to give the final distribution. This is similar to the `bins` argument of histogram. You can control this with the `adjust` argument. Values less than 1 make the curve closer to the particular dataset you have (and less smooth), while values greater than 1 make the curve smoother.
 
     Play around with the `adjust` argument, making it range from (say) 0.1 up to 10.
-    
+
     Think about what might happen if you had a different sample of earthquakes and how the density would differ between samples for different adjust parameters. If the adjust was small, would you expect the density would look different from sample to sample? What about if the adjust was large? This is another example of the Bias-Variance tradeoff!
-  
-5. Another option is a boxplot:
+
+5.  Another option is a boxplot:
 
 ```{r}
 ggplot(data=quakes) +
@@ -120,15 +124,17 @@ ggplot(data=quakes) +
   geom_boxplot()
 ```
 
-    In this representation, only the x-axis matters, the y-axis is completely arbitrary. The 'box' here represents the interquartile range - i.e. it goes from the lower quartile up to the upper quartile, capturing 50% of the data. The line inside the box is the median (i.e. the middle value). The "whiskers" on either side go from the quartiles to the minimum or maximum.
-    
-    *Does your conclusion on center/shape/spread remain the same?*
-    
-    *What do you think the points on the right represent?*
+```         
+In this representation, only the x-axis matters, the y-axis is completely arbitrary. The 'box' here represents the interquartile range - i.e. it goes from the lower quartile up to the upper quartile, capturing 50% of the data. The line inside the box is the median (i.e. the middle value). The "whiskers" on either side go from the quartiles to the minimum or maximum.
 
-6. You can change colours on the above plots via the `col` and `fill` arguments. Try setting both parameters to different colours in the above geometries to see what they control.
+*Does your conclusion on center/shape/spread remain the same?*
 
-7. Produce similar plots for the `depth` and `stations` variables as well. How would you describe those distributions? Add some notes about this.
+*What do you think the points on the right represent?*
+```
+
+6.  You can change colours on the above plots via the `col` and `fill` arguments. Try setting both parameters to different colours in the above geometries to see what they control.
+
+7.  Produce similar plots for the `depth` and `stations` variables as well. How would you describe those distributions? Add some notes about this.
 
 ## Distributions of numeric variables by group
 
@@ -142,11 +148,10 @@ ggplot(data=quakes_cat) +
   geom_boxplot()
 ```
 
-8. What is your conclusion would you make about the distribution of magnitude for shallow and deep quakes? Add some notes below.
+8.  What is your conclusion would you make about the distribution of magnitude for shallow and deep quakes? Add some notes below.
 
-9. Try switching to `fill=how_deep` or `col=how_deep` above instead of `y=how_deep` (or in addition if you like).
+9.  Try switching to `fill=how_deep` or `col=how_deep` above instead of `y=how_deep` (or in addition if you like).
 
 10. You can also introduce the grouping variable in a histogram or density via `fill` or `col` to show how the shape changes by group. You might ned to experiment with the `position` argument for the histogram (e.g. try `position="identity"`), or `alpha` argument for densities if you use `fill` to colour them.
 
 Finally, Render your document to make sure your work is reproducible. If you have an error, see if you can figure out what it is, or ask your classmates or teaching staff.
-
